@@ -1,0 +1,114 @@
+{% extends 'index.html' %}
+
+
+{% block content %}
+    <a href="/">Logout</a>
+    <table>
+        <thead>
+            <caption>{{ name }} allocation</caption>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="bold">Cost center</td>
+                {% for cost_center in cost_centers %}
+                    <td>{{ cost_center }}</td>
+                {% endfor %}
+            </tr>
+            <tr>
+                <td class="bold">Percentage</td>
+                {% for percentage in percentages %}
+                    <td>{{ percentage }}%</td>
+                {% endfor %}
+            </tr>
+            <tr>
+                <td class="bold">{{ name }} deployed</td>
+                {% for amount in amount_stored %}
+                    <td>{{ amount }} {{ symbol }}</td>
+                {% endfor %}
+            </tr>
+        </tbody>
+    </table>
+    <div>{{ name }} deployed in smart contract: {{ tokens_deployed }} {{ symbol }}</div>
+    <div>{{ name }} not deployed in smart contract: {{ tokens_not_deployed }} {{ symbol }}</div>
+    <form method="get" action="/deploy">
+        <h2>Deploy new {{ name }}</h2>
+        <label for="amountTokens">Amount to deploy</label>
+        <input type="number" id="amountTokens" name="amountTokens" max={{ tokens_not_deployed }} min=0 placeholder="amount of {{ name }} to deploy" required>
+        <input type="submit" value="Send {{ name }}">
+    </form>
+    <form method="get" action="/withdraw">
+        <h2>Withdraw {{ name }} from a specific cost center</h2>
+        <label for="withdrawTokens">Choose a cost center</label>
+        <select id="withdrawTokens" name="costCenters">
+            {% for cost_center in cost_centers %}
+                <option value={{ cost_center }}>{{ cost_center }}</option>
+            {% endfor %}
+        </select>
+        <div id="withdraw">
+            <label for="amountTokens">Indicate the amounts of {{ name }} to deploy</label>
+            <input type="number" id="amountTokens" name="amountTokens" min=0 placeholder="amount of {{ name }} to withdraw" required>
+        </div>
+        <input type="submit" value="Withdraw {{ name }}">
+    </form>
+    <form method="get" action="/remove">
+        <h2>Remove cost center</h2>
+        <label for="removeCostCenters">Choose a cost center</label>
+        <select id="removeCostCenters" name="costCenters">
+            {% for cost_center in cost_centers %}
+                <option value={{ cost_center }}>{{ cost_center }}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="Remove cost center">
+    </form>
+    <form method="get" action="/modify">
+        <h2>Modifiy cost centers and its percentage</h2>
+        <label for="costCentersToCreate">Indicate cost centers to create separate by coma: home, study, cinema</label>
+        <input type="text" id="costCentersToCreate" name="costCenters" placeholder="home, study, cinema" required>
+        <div id="setCostCenters">
+            <label for="percentages">Indicate percentage cost centers to create separate by coma: (50, 20, 30). Must be 100</label>
+            <input type="text" id="percentages" name="percentages" placeholder="50, 20, 30" required>
+        </div>
+        <input type="submit" value="Update distribution">
+    </form>
+    <a id="default" href="/default">Create a default distribution</a>
+    <form method="get" action="/send">
+        {% if request.user.is_staff %}
+            <h2>Pay your employees</h2>
+            <label for="sendTokens">Choose the address</label>
+            <select id="sendTokens" name="addresses">
+                {% for address in addresses %}
+                    <option value={{ address }}>{{ address }}</option>
+                {% endfor %}
+            </select>
+            <label for="amountTokens">Indicate the amounts of {{ name }} to send</label>
+        {% endif %}
+        <h2>Send {{ name }} to someone</h2>
+        <label for="sendTokens">Indicate the user's address</label>
+        <input type="text" id="sendTokens" name="addresses" placeholder="address in hex" required>
+        <label for="amountTokens">Indicate the amounts of {{ name }} to send</label>
+        <input type="number" id="amountTokens" name="amountTokens" min=0 max={{ tokens_not_deployed }} placeholder="amount {{ name }} to send" required>
+        <input type="submit" value="Send {{ name }}">
+    </form>
+    <form method="get" action="/events">
+        <h2>What events do you want to see?</h2>
+        <label for="events">Choose the event to see</label>
+        <select id="events" name="events">
+            {% for type in events_type %}
+                <option value={{ type }}>{{ type }}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="View events">
+    </form>
+    {% for event in received %}
+        <p>You received from {{ event.user }} {{ event.amount }} {{ symbol }} on {{ event.date }}</p>
+    {% endfor %}
+    {% for event in sended %}
+        <p>You sended {{ event.amount }} {{ symbol }} to {{ event.user }} on {{ event.date }}</p>
+    {% endfor %}
+    {% for event in deployed %}
+        <p>You deployed {{ event.amount }} {{ symbol }} on {{ event.date }}</p>
+    {% endfor %}
+    {% for event in withdrawed %}
+        <p>You withdrawed {{ event.amount }} {{ symbol }} from {{ event.cost_center }} on {{ event.date }}</p>
+    {% endfor %}
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'index.html' %}
+
+{% block content %}
+    <form method="POST" action="/" id="login">
+        {% csrf_token %}
+        {{ form }}
+        <div id="login">
+            <button>Connect with Ganache</button>
+        </div>
+    </form>
+{% endblock %}

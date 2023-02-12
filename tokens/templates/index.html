@@ -1,0 +1,19 @@
+{% load static %}
+    
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Finanacial managerial</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    </head>
+    <body>
+        {% if messages %}
+            {% for message in messages %}
+                <p {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+        {% block content %}
+        {% endblock %}
+    </body>
+</html>
