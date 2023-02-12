@@ -10,13 +10,13 @@ Questo progetto è adatto anche alle aziende in quanto lo smart contract che ges
 
 ## Tecnologie
 Per questo progetto ho utilizzato i seguenti software:
-“*” Ganache
-“*” MongoDB
-“*” Brownie
-“*” Django
+* Ganache
+* MongoDB
+* Brownie
+* Django
 e i seguenti linguaggi:
-“*” python
-“*” solidity
+* python
+* solidity
 Ho utilizzato la rete Ganache come rete dove pubblicare i due smart contract: uno che utilizza lo standart ERC20 e gestisce i token dell'azienda e il secondo che funge da gestore finanziario sulla ripartizone delle spese dei token dell'utente. Mentre ho utilizzato il framework Django per la realizzazione di un sito internet che potesse far comunicare l'utente con Ganache, MongoDB come database dove salvare gli indirizzi degli utenti e degli eventi generati dai smart contract infine Brownie per la realizzazione e il test dei smart contract.
 
 ## Insallazione ed avvio
